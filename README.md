@@ -183,9 +183,39 @@ windows_drive: 'c:'
 <br/>
 
 **레포지토리 settings > secrets > actions 에서 새로운 secret을 지정한다.**
-이 부분에서 settings > environments > new environments 로 하면 안된다. 
+이 부분에서 settings > environments > new environments 로 하면 안된다.<br/>
 envrionment는 환경이고, 그 안에 screts를 설정할 수 있다. actions에도 `environment: [환경이름]`이런 식으로 설정해서 하는 과정들이 있다. [참조](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)
 
+```yaml
+name: Some task
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  prod-task:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # uses production enviroment secrets over repository secrets
+      - name: Run node build process
+        run: "NODE_ENV=${{ env.NODE_ENV }} npm run build"
+  dev-task:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      # uses development enviroment secrets over repository secrets
+      - name: Run node build process
+        run: "NODE_ENV=${{ env.NODE_ENV }} npm run build"
+  task:
+    runs-on: ubuntu-latest
+    steps:
+      # uses repository secrets as no environment is defined
+      - name: Run node build process
+        run: "NODE_ENV=${{ env.NODE_ENV }} npm run build"
+```
 
 
 🔥 [링크](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)를 참조하여 이런식으로 하는게 맞다.
@@ -199,4 +229,5 @@ envrionment는 환경이고, 그 안에 screts를 설정할 수 있다. actions�
 * 즉 `cp`는 전체 파일을, `sync`는 새롭거나 업데이트 된 폴더만 업로드 한다.
 * `sync`는 소스 폴더와 목적지 폴더의 싱크를 동일하게 맞추고 유지하고자 할 때 사용한다. 예를들어서, 정적인 웹사이트 폴더 관리같은 경우에 좋다.
 * `cp`는 `sync`보다 더 단순하고 성능이 좋은 작업이다. 파일이 적거나 디렉토리간의 싱크를 맞추면서 작업해야 하는 작업이 아니라면 `cp`를 쓴다.
+* [참고링크](https://www.learnaws.org/2022/03/01/aws-s3-cp-sync/)
 
