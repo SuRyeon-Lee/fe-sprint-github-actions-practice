@@ -113,7 +113,7 @@ key: value
 int_type: 1
 
 #string(문자열)
-string_type: "1"
+string_type: "1" 
 
 #blooean(참/거짓)
 boolean_true_type: true
