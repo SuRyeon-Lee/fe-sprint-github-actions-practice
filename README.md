@@ -176,3 +176,27 @@ windows_drive: c:
 windows_drive: "c:"
 windows_drive: 'c:'
 ```
+
+<br/><br/>
+
+## 🐛 나의 슬픈 에러 로그
+<br/>
+
+**레포지토리 settings > secrets > actions 에서 새로운 secret을 지정한다.**
+이 부분에서 settings > environments > new environments 로 하면 안된다. 
+envrionment는 환경이고, 그 안에 screts를 설정할 수 있다. actions에도 `environment: [환경이름]`이런 식으로 설정해서 하는 과정들이 있다. [참조](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)
+
+
+
+🔥 [링크](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment)를 참조하여 이런식으로 하는게 맞다.
+<br/>
+
+**aws s3 cp 대신 aws s3 sync를 쓴다.**
+* `cp`는 목적지 폴더에 이미 파일이 존대하더라도 모든 파일을 카피한다.
+* `cp`는 목적지 폴더에서의 삭제를 지원하지 않는다. 소스 폴더에서 파일을 삭제하더라도 s3에선 삭제되지 않는다.
+* `sync`는 새롭거나 업데이트 된 파일만 소스 폴더에서 감지해서 목적지 s3폴더에 옮겨준다. 파일을 복사해서 덮어쓰기 전에 목적지 폴더부터 보면서 중복되는 것이 있는지 체크한다.
+* `sync`와 함께 `--delete` 플래그를 쓰면 소스폴더에 삭제된 파일을 목적지 폴더에서도 삭제할 수 있도록 해준다. sync는 파일의 사이즈와 가장 최근의 편집된 타임 스탬프를 체크하여 업데이트가 필요한지 판단한다. 파일 내용은 비교하지 않는다. 
+* 즉 `cp`는 전체 파일을, `sync`는 새롭거나 업데이트 된 폴더만 업로드 한다.
+* `sync`는 소스 폴더와 목적지 폴더의 싱크를 동일하게 맞추고 유지하고자 할 때 사용한다. 예를들어서, 정적인 웹사이트 폴더 관리같은 경우에 좋다.
+* `cp`는 `sync`보다 더 단순하고 성능이 좋은 작업이다. 파일이 적거나 디렉토리간의 싱크를 맞추면서 작업해야 하는 작업이 아니라면 `cp`를 쓴다.
+
