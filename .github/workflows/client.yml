@@ -31,5 +31,4 @@ jobs:
           aws s3 cp \
             --region ap-northeast-2 \
             build s3://fe-88-suryeon-lee --profile=fe-student-88-SuRyeon-Lee\
-            --delete
         working-directory: ./my-agora-states-client
