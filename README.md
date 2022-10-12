@@ -165,7 +165,7 @@ comment_single_line: >
   my first coding.
 ```
 <br/>
-
+ 
 #### ♦️ 문자열 따옴표
 * key-value 쌍에서 value에 :가 들어간 경우는 **반드시 따옴표가 필요**
 ```yaml
